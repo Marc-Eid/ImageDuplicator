@@ -46,11 +46,11 @@ public class MainActivity extends AppCompatActivity {
 
 
                        // print file names to make sure that the path is correctly accessed
-                        File directory = new File(path);
-                        File[] files = directory.listFiles();
-                        for ( File file  : files   ) {
-                            Log.d("files", file.getName());
-                        }
+//                        File directory = new File(path);
+//                        File[] files = directory.listFiles();
+//                        for ( File file  : files   ) {
+//                            Log.d("files", file.getName());
+//                        }
 
 
 

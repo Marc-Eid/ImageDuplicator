@@ -20,16 +20,19 @@ public class DirectoryObserver extends FileObserver {
     }
 
     @SuppressLint("NewApi")
-    @Override public void onEvent(int event, String path) {
+    @Override public void onEvent(int event, String path) { //the path here is just the file name
 
         if(path != null)
         {
 
             Log.e("FileObserver" , event + "");
             Log.e("FileObserver: ","File Created");
+            Log.e("FileObserver: ", "File name is: " + path);
 
-            //to-do: capture last file along some files within +/- 30s
+            File fileCreated = new File(path);
+            Log.e("File Observer", fileCreated.getName());
 
+            //TODO: Create a duplicate of the fileCreated and store it in a new folder
 
         }
         else{
