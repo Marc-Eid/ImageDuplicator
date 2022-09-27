@@ -1,6 +1,7 @@
 package com.example.imageduplicator;
 
 import android.annotation.SuppressLint;
+import android.os.Environment;
 import android.os.FileObserver;
 import android.util.Log;
 
@@ -29,8 +30,14 @@ public class DirectoryObserver extends FileObserver {
             Log.e("FileObserver: ","File Created");
             Log.e("FileObserver: ", "File name is: " + path);
 
-            File fileCreated = new File(path);
+
+            File fileCreated = new File(aboslutePath + "/" + path); //get the created file
+
+            //verifying that the file was created.
             Log.e("File Observer", fileCreated.getName());
+            Log.e("File Observer", " "+ fileCreated.getParent());
+            Log.e("File Observer", "   " + fileCreated.getAbsolutePath());
+
 
             //TODO: Create a duplicate of the fileCreated and store it in a new folder
 

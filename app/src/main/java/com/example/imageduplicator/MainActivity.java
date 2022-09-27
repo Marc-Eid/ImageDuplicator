@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 //                        File directory = new File(path);
 //                        File[] files = directory.listFiles();
 //                        for ( File file  : files   ) {
-//                            Log.d("files", file.getName());
+//                            Log.d("files", file.getName() + file.getAbsolutePath());
 //                        }
 
 
@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     Log.w("TEST", "switch is off");
                     directoryFileObserver.stopWatching();
-                    return;
                 }
             }
         });
