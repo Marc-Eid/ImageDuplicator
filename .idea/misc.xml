@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/marki/Desktop/ImageDuplicator/app/src/main/res/layout/activity_file_list.xml" value="0.17857142857142858" />
+        <entry key="..\:/Users/marki/Desktop/ImageDuplicator/app/src/main/res/layout/activity_main.xml" value="0.1569046601111586" />
+        <entry key="..\:/Users/marki/Desktop/ImageDuplicator/app/src/main/res/layout/content_file_list.xml" value="0.3671875" />
+        <entry key="..\:/Users/marki/Desktop/ImageDuplicator/app/src/main/res/layout/fragment_first.xml" value="0.3671875" />
+        <entry key="..\:/Users/marki/Desktop/ImageDuplicator/app/src/main/res/layout/fragment_second.xml" value="0.3671875" />
+        <entry key="..\:/Users/marki/Desktop/ImageDuplicator/app/src/main/res/layout/recycler_item.xml" value="0.36614583333333334" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
