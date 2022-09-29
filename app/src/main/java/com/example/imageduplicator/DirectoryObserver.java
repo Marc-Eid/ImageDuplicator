@@ -41,6 +41,20 @@ public class DirectoryObserver extends FileObserver {
 
             //TODO: Create a duplicate of the fileCreated and store it in a new folder
 
+            //check if directory exists
+            File destinationFolder = new File(Environment.getExternalStorageDirectory().toString() + "/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Images/Duplicates");
+            if(!destinationFolder.isDirectory() && destinationFolder.mkdir() ){
+                Log.w("File Observer", "Directory Created");
+            }
+            else{
+                Log.w("File Observer", "Directory Exists");
+            }
+
+
+
+
+
+
         }
         else{
             Log.e("FileObserver: ","path is null");

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#129F56"
+    android:background="#29553E"
     tools:context=".MainActivity">
 
     <Switch
@@ -12,7 +12,7 @@
         android:layout_width="240dp"
         android:layout_height="49dp"
         android:layout_marginTop="84dp"
-        android:background="#851919"
+        android:background="#5C2F2F"
         android:backgroundTint="#5C0303"
         android:backgroundTintMode="add"
         android:buttonTint="#C53131"
