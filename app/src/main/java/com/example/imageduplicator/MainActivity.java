@@ -1,33 +1,33 @@
 package com.example.imageduplicator;
 
-import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.FileObserver;
+
 import android.util.Log;
+
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
+
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
-    String path = Environment.getExternalStorageDirectory().toString() + "/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Images";
-    DirectoryObserver directoryFileObserver = new DirectoryObserver(new File(path));
+
 
 
     @Override
@@ -35,34 +35,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Switch s = (Switch) findViewById(R.id.switch2);
+        Switch s = findViewById(R.id.switch2);
 
+        String path = Environment.getExternalStorageDirectory().toString() + "/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Images";
+        DirectoryObserver directoryFileObserver = new DirectoryObserver(new File(path));
+
+        //listen for switch toggling
         s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    if (checkPermission()){
+                if (isChecked) { //if switch is checked
+                    if (checkPermission()){ //if perission is granted listen to folder
                         Log.w("TEST", "switch is on");
-
-
-
-                       // print file names to make sure that the path is correctly accessed
-//                        File directory = new File(path);
-//                        File[] files = directory.listFiles();
-//                        for ( File file  : files   ) {
-//                            Log.d("files", file.getName() + file.getAbsolutePath());
-//                        }
-
-
-
-                        //listen for files from folder x
                         directoryFileObserver.startWatching();
-
-                        //copy file to folder y
                     }
                     else{
                         requestPermission();
                     }
-
                 } else {
                     Log.w("TEST", "switch is off");
                     directoryFileObserver.stopWatching();

@@ -1,23 +1,31 @@
 package com.example.imageduplicator;
 
+import static com.google.android.material.internal.ContextUtils.getActivity;
+
 import android.annotation.SuppressLint;
+
+import android.content.Context;
 import android.os.Environment;
 import android.os.FileObserver;
 import android.util.Log;
+import android.view.View;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.stream.Stream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+
+
 
 public class DirectoryObserver extends FileObserver {
 
-    String aboslutePath;
-
+    String absolutePath;
 
     @SuppressLint("NewApi")
     public DirectoryObserver(File file) {
         super(file, FileObserver.MOVED_TO);
-        aboslutePath = file.getPath();
+        absolutePath = file.getPath();
     }
 
     @SuppressLint("NewApi")
@@ -25,25 +33,15 @@ public class DirectoryObserver extends FileObserver {
 
         if(path != null)
         {
-
             Log.e("FileObserver" , event + "");
             Log.e("FileObserver: ","File Created");
             Log.e("FileObserver: ", "File name is: " + path);
 
 
-            File fileCreated = new File(aboslutePath + "/" + path); //get the created file
+            File fileCreated = new File(absolutePath + "/" + path); //get the created file
+            File destinationFolder = new File(Environment.getExternalStorageDirectory() + "/Android/media/" + BuildConfig.APPLICATION_ID);
 
-            //verifying that the file was created.
-            Log.e("File Observer", fileCreated.getName());
-            Log.e("File Observer", " "+ fileCreated.getParent());
-            Log.e("File Observer", "   " + fileCreated.getAbsolutePath());
-
-
-            //TODO: Create a duplicate of the fileCreated and store it in a new folder
-
-            //check if directory exists
-            File destinationFolder = new File(Environment.getExternalStorageDirectory().toString() + "/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Images/Duplicates");
-            if(!destinationFolder.isDirectory() && destinationFolder.mkdir() ){
+            if(!destinationFolder.isDirectory() && destinationFolder.mkdir() ){ //check if directory exists, if not create it
                 Log.w("File Observer", "Directory Created");
             }
             else{
@@ -51,15 +49,52 @@ public class DirectoryObserver extends FileObserver {
             }
 
 
+            //create new File
+            File duplicateImage = new File(destinationFolder + "/" + fileCreated.getName());
 
+            try {
 
+                if(duplicateImage.createNewFile());
+                    Log.e("FileObserver" , "File Created");
+                copyFile(fileCreated, duplicateImage);
 
-
+            }catch(Exception e){
+                Log.e("FileObserver", "error in copying the file");
+                Log.e("FileObserver", e.toString());
+            }
         }
         else{
             Log.e("FileObserver: ","path is null");
         }
     }
+
+
+
+    private void copyFile(File sourceFile, File destFile) throws IOException {
+        if (!sourceFile.exists()) {
+            return;
+        }
+
+        FileChannel source;
+        FileChannel destination;
+
+        source = new FileInputStream(sourceFile).getChannel();
+        destination = new FileOutputStream(destFile).getChannel();
+
+        if (destination != null && source != null) {
+            destination.transferFrom(source, 0, source.size());
+        }
+        if (source != null) {
+            source.close();
+        }
+        if (destination != null) {
+            destination.close();
+        }
+
+    }
+
+
+
 
     public void close(){
         super.finalize();
