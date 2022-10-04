@@ -59,6 +59,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        //make a service that runs periodically over the directory where duplicates are stored and then delete those older than 1 day
+
+
+
+
 
 
 //        MaterialButton destinationStorage = findViewById(R.id.dest);
