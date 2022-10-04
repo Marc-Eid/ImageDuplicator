@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#29553E"
+    android:background="@drawable/background"
     tools:context=".MainActivity">
 
     <Switch
@@ -17,6 +17,7 @@
         android:backgroundTintMode="add"
         android:buttonTint="#C53131"
         android:text="Activate Image Duplicator"
+        android:textAlignment="center"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
