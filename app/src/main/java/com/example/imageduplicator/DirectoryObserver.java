@@ -33,12 +33,14 @@ public class DirectoryObserver extends FileObserver {
 
         if(path != null)
         {
+            //some logs
             Log.e("FileObserver" , event + "");
             Log.e("FileObserver: ","File Created");
             Log.e("FileObserver: ", "File name is: " + path);
 
-
-            File fileCreated = new File(absolutePath + "/" + path); //get the created file
+            //get the created file
+            File fileCreated = new File(absolutePath + "/" + path);
+            //get the default destination folder
             File destinationFolder = new File(Environment.getExternalStorageDirectory() + "/Android/media/" + BuildConfig.APPLICATION_ID);
 
             if(!destinationFolder.isDirectory() && destinationFolder.mkdir() ){ //check if directory exists, if not create it
@@ -69,7 +71,7 @@ public class DirectoryObserver extends FileObserver {
     }
 
 
-
+    //copy file to destination folder
     private void copyFile(File sourceFile, File destFile) throws IOException {
         if (!sourceFile.exists()) {
             return;

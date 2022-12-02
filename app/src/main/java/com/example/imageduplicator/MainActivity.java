@@ -36,13 +36,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Switch s = findViewById(R.id.switch2);
 
-        String path = Environment.getExternalStorageDirectory().toString() + "/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Images";
-        DirectoryObserver directoryFileObserver = new DirectoryObserver(new File(path));
+        Switch activateSwitch = findViewById(R.id.switch2);
+
+        String whatsappPath = Environment.getExternalStorageDirectory().toString() + "/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Images";
+        DirectoryObserver directoryFileObserver = new DirectoryObserver(new File(whatsappPath));
 
         //listen for switch toggling
-        s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        activateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) { //if switch is checked
                     if (checkPermission()){ //if perission is granted listen to folder
@@ -60,35 +61,53 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        Button googleButton = findViewById(R.id.googlePhotos);
+
+        //get Context
         Context context = getApplicationContext();
 
-        googleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        //Default folder
+        Switch defaultSwitch = findViewById(R.id.defaultDest);
+        //listen for switch toggling
+        defaultSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) { //if switch is checked
+                    //if perission is granted listen to folder
+                    Log.w("TEST", "Default switch is on");
 
-                Toast toast = Toast.makeText(context, "Google Photos selected", Toast.LENGTH_SHORT);
-                toast.show();
+                    Toast toast = Toast.makeText(context, "Default selected", Toast.LENGTH_SHORT);
+                    toast.show();
+
+                } else {
+                    Log.w("TEST", "Default switch is off");
+                    Toast toast = Toast.makeText(context, "Default unselected", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+        });
+
+
+        //Google Photos
+        Switch googleSwitch = findViewById(R.id.googlePhotos);
+        //listen for switch toggling
+        googleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) { //if switch is checked
+                     //if perission is granted listen to folder
+                        Log.w("TEST", "Google switch is on");
+
+                        Toast toast = Toast.makeText(context, "Google Photos selected", Toast.LENGTH_SHORT);
+                        toast.show();
+
+                } else {
+                    Log.w("TEST", "Google switch is off");
+                    Toast toast = Toast.makeText(context, "Google Photos unselected", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
             }
         });
 
 
 
-//        MaterialButton destinationStorage = findViewById(R.id.dest);
-//
-//        destinationStorage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (checkPermission()){
-//                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//                    intent.setType("file/*");
-//                    startActivity(intent);
-//
-//                }else{
-//                    requestPermission();
-//                }
-//            }
-//        });
 
 
 
