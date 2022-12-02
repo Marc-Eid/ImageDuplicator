@@ -61,11 +61,14 @@ public class MainActivity extends AppCompatActivity {
 
 
         Button googleButton = findViewById(R.id.googlePhotos);
+        Context context = getApplicationContext();
 
         googleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                Toast toast = Toast.makeText(context, "Google Photos selected", Toast.LENGTH_SHORT);
+                toast.show();
             }
         });
 
