@@ -1,7 +1,6 @@
 package com.example.imageduplicator;
 
 
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -47,11 +46,10 @@ public class MainActivity extends AppCompatActivity {
         activateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) { //if switch is checked
-                    if (checkPermission()){ //if perission is granted listen to folder
+                    if (checkPermission()) { //if perission is granted listen to folder
                         Log.e("TEST", "switch is on");
                         directoryFileObserver.startWatching();
-                    }
-                    else{
+                    } else {
                         requestPermission();
                     }
                 } else {
@@ -60,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
 
 
         //get Context
@@ -101,15 +98,15 @@ public class MainActivity extends AppCompatActivity {
         googleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) { //if switch is checked
-                     //if perission is granted listen to folder
-                        Log.w("TEST", "Google switch is on");
+                    //if perission is granted listen to folder
+                    Log.w("TEST", "Google switch is on");
 
-                        destinationsList.add("google photos");
-                        directoryFileObserver.setDestinationsList(destinationsList);
+                    destinationsList.add("google photos");
+                    directoryFileObserver.setDestinationsList(destinationsList);
 
 
-                        Toast toast = Toast.makeText(context, "Google Photos selected", Toast.LENGTH_SHORT);
-                        toast.show();
+                    Toast toast = Toast.makeText(context, "Google Photos selected", Toast.LENGTH_SHORT);
+                    toast.show();
 
                 } else {
                     Log.w("TEST", "Google switch is off");
@@ -124,27 +121,19 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
-
-
-
-
     }
 
-    private Boolean checkPermission(){
-       return PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    private Boolean checkPermission() {
+        return PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
-    private void requestPermission(){
-        if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE))
-        {
+    private void requestPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             Toast.makeText(MainActivity.this, "Storage permission is required, allow from settings", Toast.LENGTH_SHORT).show();
-        }else
-        {
+        } else {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 111);
         }
     }
-
 
 
 }
