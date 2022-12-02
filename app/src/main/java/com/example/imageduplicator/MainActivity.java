@@ -16,6 +16,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -59,10 +60,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        //make a service that runs periodically over the directory where duplicates are stored and then delete those older than 1 day
+        Button googleButton = findViewById(R.id.googlePhotos);
 
+        googleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-
+            }
+        });
 
 
 
