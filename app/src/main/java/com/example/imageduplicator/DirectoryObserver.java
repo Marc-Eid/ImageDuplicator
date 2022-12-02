@@ -1,14 +1,10 @@
 package com.example.imageduplicator;
 
-import static com.google.android.material.internal.ContextUtils.getActivity;
-
 import android.annotation.SuppressLint;
 
-import android.content.Context;
 import android.os.Environment;
 import android.os.FileObserver;
 import android.util.Log;
-import android.view.View;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -59,8 +55,8 @@ public class DirectoryObserver extends FileObserver {
 
                 try {
 
-                    if (duplicateImage.createNewFile()) ;
-                    Log.e("FileObserver", "File Created");
+                    if (duplicateImage.createNewFile())
+                        Log.e("FileObserver", "File Created");
                     copyFile(fileCreated, duplicateImage);
 
                 } catch (Exception e) {
