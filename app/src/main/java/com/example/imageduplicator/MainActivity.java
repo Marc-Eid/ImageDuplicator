@@ -25,10 +25,11 @@ import android.widget.Toast;
 import com.google.android.material.button.MaterialButton;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    ArrayList<String> destinationsList = new ArrayList<>();
 
 
     @Override
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) { //if switch is checked
                     if (checkPermission()){ //if perission is granted listen to folder
-                        Log.w("TEST", "switch is on");
+                        Log.e("TEST", "switch is on");
                         directoryFileObserver.startWatching();
                     }
                     else{
@@ -74,11 +75,18 @@ public class MainActivity extends AppCompatActivity {
                     //if perission is granted listen to folder
                     Log.w("TEST", "Default switch is on");
 
+                    destinationsList.add("default");
+                    directoryFileObserver.setDestinationsList(destinationsList);
+
                     Toast toast = Toast.makeText(context, "Default selected", Toast.LENGTH_SHORT);
                     toast.show();
 
                 } else {
                     Log.w("TEST", "Default switch is off");
+
+                    destinationsList.remove("default");
+                    directoryFileObserver.setDestinationsList(destinationsList);
+
                     Toast toast = Toast.makeText(context, "Default unselected", Toast.LENGTH_SHORT);
                     toast.show();
                 }
@@ -95,11 +103,19 @@ public class MainActivity extends AppCompatActivity {
                      //if perission is granted listen to folder
                         Log.w("TEST", "Google switch is on");
 
+                        destinationsList.add("google photos");
+                        directoryFileObserver.setDestinationsList(destinationsList);
+
+
                         Toast toast = Toast.makeText(context, "Google Photos selected", Toast.LENGTH_SHORT);
                         toast.show();
 
                 } else {
                     Log.w("TEST", "Google switch is off");
+
+                    destinationsList.remove("google photos");
+                    directoryFileObserver.setDestinationsList(destinationsList);
+
                     Toast toast = Toast.makeText(context, "Google Photos unselected", Toast.LENGTH_SHORT);
                     toast.show();
                 }
