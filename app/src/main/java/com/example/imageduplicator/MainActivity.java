@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
                     //if perission is granted listen to folder
                     Log.w("TEST", "Default switch is on");
 
+                    //update list in both this class and the directory observer class
                     destinationsList.add("default");
                     directoryFileObserver.setDestinationsList(destinationsList);
 
