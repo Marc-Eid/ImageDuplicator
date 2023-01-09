@@ -1,50 +1,46 @@
 package com.example.imageduplicator;
 
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
-import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
-
-import android.os.Handler;
 import android.util.Log;
-
-import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
-import com.google.android.material.button.MaterialButton;
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.util.store.FileDataStoreFactory;
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import com.google.auth.Credentials;
-
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.tasks.Task;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
+import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.LowLevelHttpRequest;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
 
     ArrayList<String> destinationsList = new ArrayList<>();
-
+    final int RC_SIGN_IN = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         activateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) { //if switch is checked
-                    if (checkPermission()) { //if perission is granted listen to folder
+                    if (checkPermission()) { //if permission is granted listen to folder
                         Log.e("TEST", "switch is on");
                         directoryFileObserver.startWatching();
                     } else {
@@ -84,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         defaultSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) { //if switch is checked
-                    //if perission is granted listen to folder
+                    //if permission is granted listen to folder
                     Log.w("TEST", "Default switch is on");
 
                     //update list in both this class and the directory observer class
@@ -108,12 +104,25 @@ public class MainActivity extends AppCompatActivity {
 
 
         //Google Photos
+
+        GoogleSignInClient mGoogleSignInClient;
+        String serverClientId = getString(R.string.server_client_id);
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestScopes(new Scope(Scopes.EMAIL), new Scope(Scopes.DRIVE_APPS))
+                .requestEmail()
+                .requestServerAuthCode(serverClientId)
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+
         Switch googleSwitch = findViewById(R.id.googlePhotos);
         //listen for switch toggling
         googleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) { //if switch is checked
-                    //if perission is granted listen to folder
+                    //if permission is granted listen to folder
                     Log.w("TEST", "Google switch is on");
 
                     destinationsList.add("google photos");
@@ -128,6 +137,48 @@ public class MainActivity extends AppCompatActivity {
                     //2. exchange authorization code for access token
                     //3. use access token to call google API
                     /////
+
+                    Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+
+                    startActivityForResult(signInIntent, RC_SIGN_IN);
+                    GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(context);
+                    Log.e("Account Name", account.getDisplayName() == null ? "null" : account.getDisplayName());
+                    Log.e("Account Auth Code", account.getServerAuthCode() == null ? "null" : account.getServerAuthCode());
+
+
+                    Thread networkThread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+
+                                GoogleTokenResponse tokenResponse =
+                                        new GoogleAuthorizationCodeTokenRequest(
+                                                new NetHttpTransport(),
+                                                JacksonFactory.getDefaultInstance(),
+                                                "https://oauth2.googleapis.com/token",
+                                                "646550166432-tkj80ckrp56d2eh1b672uefdhmp3gcej.apps.googleusercontent.com",
+                                                "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",
+                                                account.getServerAuthCode(),
+                                                "")
+                                                .execute();
+
+                                String accessToken = tokenResponse.getAccessToken();
+                                directoryFileObserver.setAccessToken(accessToken);
+
+                                Log.e("Access Token", accessToken);
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+                    networkThread.start();
+
+
+
+
+                    ///////
 
 
                     Toast toast = Toast.makeText(context, "Google Photos selected", Toast.LENGTH_SHORT);
@@ -159,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 111);
         }
     }
+
 
 
 }

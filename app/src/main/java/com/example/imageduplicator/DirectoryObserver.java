@@ -24,6 +24,7 @@ public class DirectoryObserver extends FileObserver {
 
     String absolutePath;
     ArrayList<String> destinationsList;
+    String accessToken;
 
     @SuppressLint("NewApi")
     public DirectoryObserver(File file) {
@@ -80,7 +81,7 @@ public class DirectoryObserver extends FileObserver {
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.addRequestProperty("client_id", "646550166432-tkj80ckrp56d2eh1b672uefdhmp3gcej.apps.googleusercontent.com");
                     conn.addRequestProperty("client_secret", "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");
-                    conn.setRequestProperty("Authorization", "OAuth " + token);
+                    conn.setRequestProperty("Authorization", "OAuth " + accessToken);
 
                     conn.setRequestMethod("POST");
                     conn.setRequestProperty("Accept", "application/json");
@@ -154,6 +155,10 @@ public class DirectoryObserver extends FileObserver {
 
     public ArrayList<String> getDestinationsList() {
         return destinationsList;
+    }
+
+    public void setAccessToken(String token){
+        accessToken = token;
     }
 
 
