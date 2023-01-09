@@ -6,12 +6,15 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 
+import android.os.Handler;
 import android.util.Log;
 
 import android.view.View;
@@ -22,9 +25,21 @@ import android.widget.Toast;
 
 
 import com.google.android.material.button.MaterialButton;
+import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
+import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.util.store.FileDataStoreFactory;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
+import com.google.auth.Credentials;
+
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -103,6 +118,12 @@ public class MainActivity extends AppCompatActivity {
 
                     destinationsList.add("google photos");
                     directoryFileObserver.setDestinationsList(destinationsList);
+
+
+                    //////
+
+
+                    /////
 
 
                     Toast toast = Toast.makeText(context, "Google Photos selected", Toast.LENGTH_SHORT);
