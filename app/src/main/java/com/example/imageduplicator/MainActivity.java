@@ -33,15 +33,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     ArrayList<String> destinationsList = new ArrayList<>();
-
-    //get Context
-    Context context = getApplicationContext();
-
-    //google related
-    GoogleSignInClient mGoogleSignInClient;
     final int RC_SIGN_IN = 1;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +64,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
+        //get Context
+        Context context = getApplicationContext();
 
         //Default folder
         Switch defaultSwitch = findViewById(R.id.defaultDest);
@@ -105,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Google Photos
 
+        GoogleSignInClient mGoogleSignInClient;
         String serverClientId = getString(R.string.server_client_id);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -114,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+
 
         Switch googleSwitch = findViewById(R.id.googlePhotos);
         //listen for switch toggling
@@ -128,45 +122,56 @@ public class MainActivity extends AppCompatActivity {
                     directoryFileObserver.setDestinationsList(destinationsList);
 
 
+                    //////
+                    //get access token
+                    //https://developers.google.com/identity/protocols/oauth2/native-app
+
+                    //1. get authorization code using ssl
+                    //2. exchange authorization code for access token
+                    //3. use access token to call google API
+                    /////
+
+                    Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+
                     startActivityForResult(signInIntent, RC_SIGN_IN);
                     GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(context);
+                    Log.e("Account Name", account.getDisplayName() == null ? "null" : account.getDisplayName());
+                    Log.e("Account Auth Code", account.getServerAuthCode() == null ? "null" : account.getServerAuthCode());
 
-                    Log.e("Account Name", (account != null ? account.getDisplayName() : null) == null ? "null" : account.getDisplayName());
-                    Log.e("Account Auth Code", (account != null ? account.getServerAuthCode() : null) == null ? "null" : account.getServerAuthCode());
-                    String authCode;
-                    if(account != null && account.getServerAuthCode() != null){
-                        authCode = account.getServerAuthCode();
 
-                        Thread networkThread = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
+                    Thread networkThread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
 
-                                    GoogleTokenResponse tokenResponse =
-                                            new GoogleAuthorizationCodeTokenRequest(
-                                                    new NetHttpTransport(),
-                                                    JacksonFactory.getDefaultInstance(),
-                                                    "https://oauth2.googleapis.com/token",
-                                                    "646550166432-tkj80ckrp56d2eh1b672uefdhmp3gcej.apps.googleusercontent.com",
-                                                    "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",
-                                                    authCode,
-                                                    "")
-                                                    .execute();
+                                GoogleTokenResponse tokenResponse =
+                                        new GoogleAuthorizationCodeTokenRequest(
+                                                new NetHttpTransport(),
+                                                JacksonFactory.getDefaultInstance(),
+                                                "https://oauth2.googleapis.com/token",
+                                                "646550166432-tkj80ckrp56d2eh1b672uefdhmp3gcej.apps.googleusercontent.com",
+                                                "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",
+                                                account.getServerAuthCode(),
+                                                "")
+                                                .execute();
 
-                                    String accessToken = tokenResponse.getAccessToken();
-                                    directoryFileObserver.setAccessToken(accessToken);
+                                String accessToken = tokenResponse.getAccessToken();
+                                directoryFileObserver.setAccessToken(accessToken);
 
-                                    Log.e("Access Token", accessToken);
+                                Log.e("Access Token", accessToken);
 
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        });
+                        }
+                    });
 
-                        networkThread.start();
-                    }
+                    networkThread.start();
 
+
+
+
+                    ///////
 
 
                     Toast toast = Toast.makeText(context, "Google Photos selected", Toast.LENGTH_SHORT);
