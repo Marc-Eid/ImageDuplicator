@@ -121,8 +121,12 @@ public class MainActivity extends AppCompatActivity {
 
 
                     //////
+                    //get access token
+                    //https://developers.google.com/identity/protocols/oauth2/native-app
 
-
+                    //1. get authorization code using ssl
+                    //2. exchange authorization code for access token
+                    //3. use access token to call google API
                     /////
 
 
