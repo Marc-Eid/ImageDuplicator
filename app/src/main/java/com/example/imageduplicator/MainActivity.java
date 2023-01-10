@@ -28,6 +28,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 
 import java.io.File;
+import java.security.KeyStore;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -99,12 +100,12 @@ public class MainActivity extends AppCompatActivity {
         //Google Photos
 
         GoogleSignInClient mGoogleSignInClient;
-        String serverClientId = getString(R.string.server_client_id);
+
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestScopes(new Scope(Scopes.EMAIL), new Scope(Scopes.DRIVE_APPS))
                 .requestEmail()
-                .requestServerAuthCode(serverClientId)
+                .requestServerAuthCode(BuildConfig.CLIENT_ID)
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -141,8 +142,8 @@ public class MainActivity extends AppCompatActivity {
                                                 new NetHttpTransport(),
                                                 JacksonFactory.getDefaultInstance(),
                                                 "https://oauth2.googleapis.com/token",
-                                                "646550166432-tkj80ckrp56d2eh1b672uefdhmp3gcej.apps.googleusercontent.com",
-                                                "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",
+                                                BuildConfig.CLIENT_ID,
+                                                BuildConfig.CLIENT_SECRET,
                                                 account.getServerAuthCode(),
                                                 "")
                                                 .execute();
