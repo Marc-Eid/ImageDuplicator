@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> destinationsList = new ArrayList<>();
     final int RC_SIGN_IN = 1;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,9 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //Google Photos
-
         GoogleSignInClient mGoogleSignInClient;
-
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestScopes(new Scope(Scopes.EMAIL), new Scope(Scopes.DRIVE_APPS))
@@ -123,49 +123,26 @@ public class MainActivity extends AppCompatActivity {
                     directoryFileObserver.setDestinationsList(destinationsList);
 
 
-
+                    //make intent
                     Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-
                     startActivityForResult(signInIntent, RC_SIGN_IN);
+
+                    //get google account
                     GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(context);
-                    Log.e("Account Name", account.getDisplayName() == null ? "null" : account.getDisplayName());
-                    Log.e("Account Auth Code", account.getServerAuthCode() == null ? "null" : account.getServerAuthCode());
 
+                    if(account != null) {
+                        Log.e("Account Name", account.getDisplayName());
+                        Log.e("Account Auth Code", account.getServerAuthCode());
+                    }
 
-                    Thread networkThread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
+                    GoogleTokenResponse tokenResponse= GooglePhotosUtilities.getGoogleTokenResponse(account);
 
-                                GoogleTokenResponse tokenResponse =
-                                        new GoogleAuthorizationCodeTokenRequest(
-                                                new NetHttpTransport(),
-                                                JacksonFactory.getDefaultInstance(),
-                                                "https://oauth2.googleapis.com/token",
-                                                BuildConfig.CLIENT_ID,
-                                                BuildConfig.CLIENT_SECRET,
-                                                account.getServerAuthCode(),
-                                                "")
-                                                .execute();
+                    if(tokenResponse != null) {
+                        String accessToken = tokenResponse.getAccessToken();
 
-                                String accessToken = tokenResponse.getAccessToken();
-                                directoryFileObserver.setAccessToken(accessToken);
-
-                                Log.e("Access Token", accessToken);
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-
-                    networkThread.start();
-
-
-
-
-                    ///////
-
+                        //give the Directory file observer the access token to call google photos API
+                        directoryFileObserver.setAccessToken(accessToken);
+                    }
 
                     Toast toast = Toast.makeText(context, "Google Photos selected", Toast.LENGTH_SHORT);
                     toast.show();
@@ -181,6 +158,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+
 
 
     }
