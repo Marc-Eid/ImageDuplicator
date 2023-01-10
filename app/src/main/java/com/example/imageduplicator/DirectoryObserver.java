@@ -74,47 +74,8 @@ public class DirectoryObserver extends FileObserver {
 
 
             if(destinationsList.contains("google photos")){
-
-                try {
-
-                    URL url = new URL("https://photoslibrary.googleapis.com/v1/mediaItems:batchCreate");
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.addRequestProperty("client_id", "646550166432-tkj80ckrp56d2eh1b672uefdhmp3gcej.apps.googleusercontent.com");
-                    conn.addRequestProperty("client_secret", "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");
-                    conn.setRequestProperty("Authorization", "OAuth " + accessToken);
-
-                    conn.setRequestMethod("POST");
-                    conn.setRequestProperty("Accept", "application/json");
-                    conn.setRequestProperty("Content-Type", "application/json");
-                    conn.setDoOutput(true);
-
-                    String jsonInputString = "{\n" +
-                            "  \"albumId\": string,\n" +
-                            "  \"newMediaItems\": [\n" +
-                            "    {\n" +
-                            "      object (NewMediaItem)\n" +
-                            "    }\n" +
-                            "  ],\n" +
-                            "  \"albumPosition\": {\n" +
-                            "    object (AlbumPosition)\n" +
-                            "  }\n" +
-                            "}";
-
-                    try(OutputStream os = conn.getOutputStream()) {
-                        byte[] input = jsonInputString.getBytes("utf-8");
-                        os.write(input, 0, input.length);
-                    }
-
-
-                    conn.disconnect();
-
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
+                Log.e("AccessToken Dir", accessToken);
+                GooglePhotosUtilities.postToGooglePhotos(accessToken, fileCreated);
             }
 
 

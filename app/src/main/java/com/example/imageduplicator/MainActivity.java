@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         GoogleSignInClient mGoogleSignInClient;
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestScopes(new Scope(Scopes.EMAIL), new Scope(Scopes.DRIVE_APPS))
+                .requestScopes(new Scope(Scopes.EMAIL), new Scope(Scopes.DRIVE_APPS), new Scope("https://www.googleapis.com/auth/photoslibrary"))
                 .requestEmail()
                 .requestServerAuthCode(BuildConfig.CLIENT_ID)
                 .build();
@@ -132,15 +132,18 @@ public class MainActivity extends AppCompatActivity {
 
                     if(account != null) {
                         Log.e("Account Name", account.getDisplayName());
-                        Log.e("Account Auth Code", account.getServerAuthCode());
+                        Log.e("Account Auth Code", account.getServerAuthCode() + " ");
                     }
 
-                    GoogleTokenResponse tokenResponse= GooglePhotosUtilities.getGoogleTokenResponse(account);
+                    //exchage auth code with access token
+                    GoogleTokenResponse tokenResponse = GooglePhotosUtilities.getGoogleTokenResponse(account);
+
 
                     if(tokenResponse != null) {
                         String accessToken = tokenResponse.getAccessToken();
 
                         //give the Directory file observer the access token to call google photos API
+                        Log.e("ttt", accessToken);
                         directoryFileObserver.setAccessToken(accessToken);
                     }
 
