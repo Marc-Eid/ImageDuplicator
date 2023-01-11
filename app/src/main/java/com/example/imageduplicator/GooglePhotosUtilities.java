@@ -38,7 +38,7 @@ public class GooglePhotosUtilities {
 
     static GoogleTokenResponse tokenResponse;
 
-    public static GoogleTokenResponse getGoogleTokenResponse(GoogleSignInAccount account) {
+    public static GoogleTokenResponse getGoogleTokenResponse(GoogleSignInAccount account){
 
 
 
@@ -67,6 +67,12 @@ public class GooglePhotosUtilities {
         });
 
         networkThread.start();
+        try {
+            networkThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Log.e("Error", e.toString());
+        }
         return tokenResponse;
     }
 

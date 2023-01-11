@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,18 +37,27 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> destinationsList = new ArrayList<>();
     final int RC_SIGN_IN = 1;
 
-
+    GoogleSignInAccount account;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //get Context
+        Context context = getApplicationContext();
+
+        //get last signed in google account
+        account = GoogleSignIn.getLastSignedInAccount(context);
+
+
+        //Get Whatsapp directory
+        String whatsappPath = Environment.getExternalStorageDirectory().toString() + "/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Images";
+        DirectoryObserver directoryFileObserver = new DirectoryObserver(new File(whatsappPath));
+
 
         Switch activateSwitch = findViewById(R.id.switch2);
 
-        String whatsappPath = Environment.getExternalStorageDirectory().toString() + "/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Images";
-        DirectoryObserver directoryFileObserver = new DirectoryObserver(new File(whatsappPath));
 
         //listen for switch toggling
         activateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -67,8 +77,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        //get Context
-        Context context = getApplicationContext();
+
 
         //Default folder
         Switch defaultSwitch = findViewById(R.id.defaultDest);
@@ -98,6 +107,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //display google account info
+        TextView googleAccountInfo = findViewById(R.id.googleAccountInfo);
+
+
 
         //Google Photos
         GoogleSignInClient mGoogleSignInClient;
@@ -112,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         Switch googleSwitch = findViewById(R.id.googlePhotos);
+
         //listen for switch toggling
         googleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -128,24 +142,34 @@ public class MainActivity extends AppCompatActivity {
                     startActivityForResult(signInIntent, RC_SIGN_IN);
 
                     //get google account
-                    GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(context);
+                    account = GoogleSignIn.getLastSignedInAccount(context);
+
+
+
+                    if(account != null)
+                        googleAccountInfo.setText("Account: " + account.getEmail() + "\n"+ account.getServerAuthCode());
 
                     if(account != null) {
                         Log.e("Account Name", account.getDisplayName());
                         Log.e("Account Auth Code", account.getServerAuthCode() + " ");
                     }
 
+
                     //exchage auth code with access token
-                    GoogleTokenResponse tokenResponse = GooglePhotosUtilities.getGoogleTokenResponse(account);
+                    GoogleTokenResponse tokenResponse = null;
+                    if(account != null && account.getServerAuthCode() != null){
+                        tokenResponse = GooglePhotosUtilities.getGoogleTokenResponse(account);
+                    }
 
-
+                    //get access token and pass it to DirectoryObserver
                     if(tokenResponse != null) {
                         String accessToken = tokenResponse.getAccessToken();
 
                         //give the Directory file observer the access token to call google photos API
-                        Log.e("ttt", accessToken);
+                        Log.e("Token passed to DirObs", accessToken);
                         directoryFileObserver.setAccessToken(accessToken);
                     }
+
 
                     Toast toast = Toast.makeText(context, "Google Photos selected", Toast.LENGTH_SHORT);
                     toast.show();
@@ -163,6 +187,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        if(account != null)
+            googleAccountInfo.setText("Account: " + account.getEmail() + "\n" + account.getServerAuthCode());
 
 
 

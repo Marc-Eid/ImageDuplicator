@@ -46,11 +46,11 @@ public class DirectoryObserver extends FileObserver {
 
             //get the created file
             File fileCreated = new File(absolutePath + "/" + path);
+            //get the default destination folder
             File destinationFolder = new File(Environment.getExternalStorageDirectory() + "/Android/media/" + BuildConfig.APPLICATION_ID);
 
             //if default switch is selected send new copies to the app folder
             if (destinationsList.contains("default")) {
-                //get the default destination folder
 
 
                 if (!destinationFolder.isDirectory() && destinationFolder.mkdir()) { //check if directory exists, if not create it
@@ -66,6 +66,8 @@ public class DirectoryObserver extends FileObserver {
 
                     if (duplicateImage.createNewFile())
                         Log.e("FileObserver", "File Created");
+
+                    //copy file contents
                     copyFile(fileCreated, duplicateImage);
 
                 } catch (Exception e) {
@@ -75,11 +77,10 @@ public class DirectoryObserver extends FileObserver {
             }
 
 
-            if(destinationsList.contains("google photos")){
+            if (destinationsList.contains("google photos")) {
                 Log.e("AccessToken Dir", accessToken + "");
 
-                    GooglePhotosUtilities.postToGooglePhotos(accessToken, fileCreated);
-
+                GooglePhotosUtilities.postToGooglePhotos(accessToken, fileCreated);
             }
 
 
@@ -122,7 +123,7 @@ public class DirectoryObserver extends FileObserver {
         return destinationsList;
     }
 
-    public void setAccessToken(String token){
+    public void setAccessToken(String token) {
         accessToken = token;
     }
 

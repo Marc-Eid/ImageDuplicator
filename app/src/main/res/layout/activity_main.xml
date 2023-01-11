@@ -28,13 +28,13 @@
         android:id="@+id/defaultDest"
         android:layout_width="196dp"
         android:layout_height="50dp"
-        android:layout_marginTop="88dp"
+        android:layout_marginTop="112dp"
         android:background="@color/purple_500"
         android:paddingLeft="20dp"
-        android:textColor="#FFFFFF"
         android:text="Default Folder"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.216"
+        app:layout_constraintHorizontal_bias="0.218"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/switch2" />
 
@@ -42,16 +42,42 @@
         android:id="@+id/googlePhotos"
         android:layout_width="199dp"
         android:layout_height="50dp"
+        android:layout_marginTop="40dp"
         android:background="@color/purple_500"
-        android:textColor="#FFFFFF"
         android:paddingLeft="20dp"
         android:text="Google Photos"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.221"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/defaultDest" />
+
+    <EditText
+        android:id="@+id/destinationsList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#166A50"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Destiations List"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/defaultDest"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switch2" />
+
+    <TextView
+        android:id="@+id/googleAccountInfo"
+        android:layout_width="216dp"
+        android:layout_height="55dp"
+        android:layout_marginBottom="248dp"
+        android:background="@color/purple_500"
+        android:text="Account: "
+        android:textColor="#F4EFEF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.208"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/defaultDest"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintHorizontal_bias="0.241"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
