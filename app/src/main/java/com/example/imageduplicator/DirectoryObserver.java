@@ -17,6 +17,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
 import java.util.ArrayList;
 
 
@@ -45,11 +46,12 @@ public class DirectoryObserver extends FileObserver {
 
             //get the created file
             File fileCreated = new File(absolutePath + "/" + path);
+            File destinationFolder = new File(Environment.getExternalStorageDirectory() + "/Android/media/" + BuildConfig.APPLICATION_ID);
 
             //if default switch is selected send new copies to the app folder
             if (destinationsList.contains("default")) {
                 //get the default destination folder
-                File destinationFolder = new File(Environment.getExternalStorageDirectory() + "/Android/media/" + BuildConfig.APPLICATION_ID);
+
 
                 if (!destinationFolder.isDirectory() && destinationFolder.mkdir()) { //check if directory exists, if not create it
                     Log.w("File Observer", "Directory Created");
@@ -74,8 +76,10 @@ public class DirectoryObserver extends FileObserver {
 
 
             if(destinationsList.contains("google photos")){
-                Log.e("AccessToken Dir", accessToken);
-                GooglePhotosUtilities.postToGooglePhotos(accessToken, fileCreated);
+                Log.e("AccessToken Dir", accessToken + "");
+
+                    GooglePhotosUtilities.postToGooglePhotos(accessToken, fileCreated);
+
             }
 
 
