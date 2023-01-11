@@ -7,3 +7,5 @@ When a friend sends a Whatsapp image and then deletes it, the image is deleted f
 :slightly_smiling_face: **solution in the system-to-be**
 
 ImageDuplicator listens to the directory where Whatsapp images are created and then duplicates the image in a new folder. 
+
+Desing patterns used: Facade and observer
