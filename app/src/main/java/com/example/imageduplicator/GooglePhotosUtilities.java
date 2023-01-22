@@ -1,10 +1,12 @@
 package com.example.imageduplicator;
 
+import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
@@ -37,6 +39,11 @@ import java.util.Iterator;
 public class GooglePhotosUtilities {
 
     static GoogleTokenResponse tokenResponse;
+
+    public static GoogleSignInAccount getLastSignedInAccount(Context context){
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(context);
+        return account;
+    }
 
     public static GoogleTokenResponse getGoogleTokenResponse(GoogleSignInAccount account){
 

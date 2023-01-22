@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,7 +49,8 @@ public class MainActivity extends AppCompatActivity {
         Context context = getApplicationContext();
 
         //get last signed in google account
-        account = GoogleSignIn.getLastSignedInAccount(context);
+
+        account = GooglePhotosUtilities.getLastSignedInAccount(context);
 
 
         //Get Whatsapp directory
@@ -125,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         Switch googleSwitch = findViewById(R.id.googlePhotos);
+        ImageView greenCheck = findViewById(R.id.check);
+        ImageView xMark = findViewById(R.id.x);
 
         //listen for switch toggling
         googleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -142,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivityForResult(signInIntent, RC_SIGN_IN);
 
                     //get google account
-                    account = GoogleSignIn.getLastSignedInAccount(context);
+                    account = GooglePhotosUtilities.getLastSignedInAccount(context);
 
 
 
@@ -170,6 +174,10 @@ public class MainActivity extends AppCompatActivity {
                         directoryFileObserver.setAccessToken(accessToken);
                     }
 
+                    if (account != null && account.getServerAuthCode() != null) {
+                        greenCheck.setVisibility(ImageView.VISIBLE);
+                        xMark.setVisibility(ImageView.INVISIBLE);
+                    }
 
                     Toast toast = Toast.makeText(context, "Google Photos selected", Toast.LENGTH_SHORT);
                     toast.show();
@@ -179,6 +187,9 @@ public class MainActivity extends AppCompatActivity {
 
                     destinationsList.remove("google photos");
                     directoryFileObserver.setDestinationsList(destinationsList);
+
+                    greenCheck.setVisibility(ImageView.INVISIBLE);
+                    xMark.setVisibility(ImageView.VISIBLE);
 
                     Toast toast = Toast.makeText(context, "Google Photos unselected", Toast.LENGTH_SHORT);
                     toast.show();
