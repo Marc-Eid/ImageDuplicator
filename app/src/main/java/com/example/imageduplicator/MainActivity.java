@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                     if(account != null)
-                        googleAccountInfo.setText("Account: " + account.getEmail() + "\n"+ account.getServerAuthCode());
+                        googleAccountInfo.setText("Account: " + account.getEmail() + "\n"+ "Server Auth Code: " + account.getServerAuthCode());
 
                     if(account != null) {
                         Log.e("Account Name", account.getDisplayName());
@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         if(account != null)
-            googleAccountInfo.setText("Account: " + account.getEmail() + "\n" + account.getServerAuthCode());
+            googleAccountInfo.setText("Account: " + account.getEmail() + "\n" + "Server Auth Code: " + account.getServerAuthCode());
 
 
 
